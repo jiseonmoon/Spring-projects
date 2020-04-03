@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.mapper.NewsMapper">
+
+	<insert id="insertNewsOneByOne">
+		INSERT INTO tbl_news(ntitle, ncontent, rno, ndate)
+		VALUES(#{ntitle}, #{ncontent}, #{rno}, #{ndate})
+	</insert>
+
+	<insert id="insertNewsAtOnce" parameterType="list">
+		INSERT INTO
+		tbl_news (ntitle, ncontent, rno, ndate)
+		VALUES
+		<foreach collection="list" item="item" separator=",">
+			(#{item.ntitle}, #{item.ncontent}, #{item.rno}, #{item.ndate})
+		</foreach>
+	</insert>
+
+	<select id="selectNewsList" resultType="kr.co.domain.NewsVO">
+		<![CDATA[
+		SELECT nno, ntitle,
+		ncontent, rno, ndate
+		FROM tbl_news
+		WHERE nno>0
+		ORDER BY nno DESC
+		LIMIT #{pageStart}, #{amount}
+		]]>
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		tbl_news
+		WHERE nno>0
+	</select>
+
+</mapper>
